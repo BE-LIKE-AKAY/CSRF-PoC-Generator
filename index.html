@@ -1,186 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CSRF PoC Generator (Hacker Edition)</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-      background-color: #0d0d0d;
-      color: #00ff00;
-      font-family: 'Courier New', monospace;
-    }
-
-    h1 {
-      text-shadow: 0 0 5px #00ff00;
-      animation: glitch 1s infinite;
-    }
-
-    .card {
-      background-color: #1a1a1a;
-      border: 1px solid #00ff00;
-      box-shadow: 0 0 15px #00ff0060;
-    }
-
-    .card-header {
-      font-weight: bold;
-    }
-
-    .code-box {
-      background: #000;
-      border: 1px solid #00ff00;
-      min-height: 300px;
-      padding: 15px;
-      color: #00ff00;
-      white-space: pre-wrap;
-      font-family: 'Courier New', monospace;
-    }
-
-    .btn-primary, .btn-success {
-      background-color: #00ff00;
-      border-color: #00ff00;
-      color: #000;
-    }
-
-    .btn-primary:hover, .btn-success:hover {
-      background-color: #00cc6f;
-      border-color: #00cc6f;
-    }
-
-    @keyframes glitch {
-      0% { text-shadow: 0 0 5px #00ff00; }
-      50% { text-shadow: 2px 2px 0 #ff00cc, -2px -2px 0 #00ffff; }
-      100% { text-shadow: 0 0 5px #00ff00; }
-    }
-
-    .highlight {
-      background-color: #002b36;
-      transition: background-color 0.3s;
-    }
-
-    .glow-text {
-      color: #00ff00;
-      text-shadow: 0 0 8px #00ff00;
-    }
-
-    ::selection {
-      background: #00ff00;
-      color: #000;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced CSRF PoC Generator - Hacker Edition</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container py-4">
-    <h1 class="text-center glow-text mb-5">⚠️💀 CSRF PoC Generator - Hacker 💀⚠️</h1>
-
-    <div class="row g-4">
-      <!-- Input Section -->
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-header bg-dark text-success">Input HTTP Request</div>
-          <div class="card-body">
-            <div class="mb-3">
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="protocol" id="http" checked>
-                <label class="form-check-label" for="http">HTTP</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="protocol" id="https">
-                <label class="form-check-label" for="https">HTTPS</label>
-              </div>
+    <!-- Matrix Rain Background -->
+    <canvas id="matrix-canvas"></canvas>
+    
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="main-title">
+                <span class="skull">💀</span>
+                <span class="typing-text">ADVANCED CSRF POC GENERATOR</span>
+                <span class="skull">💀</span>
+            </h1>
+            <p class="subtitle glitch-text">Professional Penetration Testing Tool</p>
+            <div class="warning-banner">
+                <span class="warning-icon">⚠️</span>
+                Educational Use Only - Use Responsibly
+                <span class="warning-icon">⚠️</span>
             </div>
-            <div id="input-box" class="code-box" contenteditable="true"></div>
-            <button class="btn btn-primary mt-3" onclick="generatePoC()">💣 Generate PoC</button>
-          </div>
-        </div>
-      </div>
+        </header>
 
-      <!-- Output Section -->
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-header bg-dark text-success">Generated CSRF Form</div>
-          <div class="card-body">
-            <div id="output-box" class="code-box"></div>
-            <button class="btn btn-success mt-3" onclick="copyOutput()">📋 Copy</button>
-            <button class="btn btn-success mt-3" onclick="downloadHTML()">⬇️ Download</button>
-          </div>
-        </div>
-      </div>
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Input Section -->
+            <section class="input-section">
+                <div class="card neon-border">
+                    <div class="card-header">
+                        <h2>📡 HTTP REQUEST INPUT</h2>
+                        <div class="header-controls">
+                            <select id="template-selector" class="control-select">
+                                <option value="">Select Template</option>
+                            </select>
+                            <button id="clear-btn" class="control-btn">🗑️ Clear</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="protocol-selector">
+                            <label class="radio-label">
+                                <input type="radio" name="protocol" value="https" checked>
+                                <span class="radio-custom"></span>
+                                HTTPS
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="protocol" value="http">
+                                <span class="radio-custom"></span>
+                                HTTP
+                            </label>
+                        </div>
+                        <div class="input-container">
+                            <textarea id="request-input" class="request-textarea" placeholder="Paste your HTTP request here..."></textarea>
+                            <div class="input-status">
+                                <span id="validation-status" class="status-indicator">Ready</span>
+                                <span id="char-count" class="char-count">0 chars</span>
+                            </div>
+                        </div>
+                        <div class="input-actions">
+                            <button id="generate-btn" class="btn btn-primary pulse-animation">
+                                <span class="btn-icon">🚀</span>
+                                Generate PoC
+                            </button>
+                            <button id="validate-btn" class="btn btn-secondary">
+                                <span class="btn-icon">✅</span>
+                                Validate
+                            </button>
+                            <button id="save-template-btn" class="btn btn-secondary">
+                                <span class="btn-icon">💾</span>
+                                Save Template
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Output Section -->
+            <section class="output-section">
+                <div class="card neon-border">
+                    <div class="card-header">
+                        <h2>⚡ GENERATED POC</h2>
+                        <div class="header-controls">
+                            <button id="copy-all-btn" class="control-btn">📋 Copy All</button>
+                            <button id="download-all-btn" class="control-btn">⬇️ Download</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="poc-tabs">
+                            <button class="tab-btn active" data-tab="html-form">📄 HTML Form</button>
+                            <button class="tab-btn" data-tab="auto-form">🤖 Auto-Submit</button>
+                            <button class="tab-btn" data-tab="js-fetch">📡 JS Fetch</button>
+                            <button class="tab-btn" data-tab="xhr">🔄 XMLHttpRequest</button>
+                            <button class="tab-btn" data-tab="img-get">🖼️ Image GET</button>
+                        </div>
+                        <div class="poc-content">
+                            <div id="html-form" class="tab-content active">
+                                <div class="output-header">
+                                    <span class="output-title">HTML Form PoC</span>
+                                    <div class="output-actions">
+                                        <button class="action-btn" onclick="copyContent('html-form-code')">📋</button>
+                                        <button class="action-btn" onclick="downloadContent('html-form-code', 'csrf-form.html')">⬇️</button>
+                                    </div>
+                                </div>
+                                <div class="code-container">
+                                    <pre id="html-form-code" class="code-block"></pre>
+                                </div>
+                            </div>
+                            <div id="auto-form" class="tab-content">
+                                <div class="output-header">
+                                    <span class="output-title">Auto-Submit Form PoC</span>
+                                    <div class="output-actions">
+                                        <button class="action-btn" onclick="copyContent('auto-form-code')">📋</button>
+                                        <button class="action-btn" onclick="downloadContent('auto-form-code', 'csrf-auto.html')">⬇️</button>
+                                    </div>
+                                </div>
+                                <div class="code-container">
+                                    <pre id="auto-form-code" class="code-block"></pre>
+                                </div>
+                            </div>
+                            <div id="js-fetch" class="tab-content">
+                                <div class="output-header">
+                                    <span class="output-title">JavaScript Fetch PoC</span>
+                                    <div class="output-actions">
+                                        <button class="action-btn" onclick="copyContent('js-fetch-code')">📋</button>
+                                        <button class="action-btn" onclick="downloadContent('js-fetch-code', 'csrf-fetch.html')">⬇️</button>
+                                    </div>
+                                </div>
+                                <div class="code-container">
+                                    <pre id="js-fetch-code" class="code-block"></pre>
+                                </div>
+                            </div>
+                            <div id="xhr" class="tab-content">
+                                <div class="output-header">
+                                    <span class="output-title">XMLHttpRequest PoC</span>
+                                    <div class="output-actions">
+                                        <button class="action-btn" onclick="copyContent('xhr-code')">📋</button>
+                                        <button class="action-btn" onclick="downloadContent('xhr-code', 'csrf-xhr.html')">⬇️</button>
+                                    </div>
+                                </div>
+                                <div class="code-container">
+                                    <pre id="xhr-code" class="code-block"></pre>
+                                </div>
+                            </div>
+                            <div id="img-get" class="tab-content">
+                                <div class="output-header">
+                                    <span class="output-title">Image GET PoC</span>
+                                    <div class="output-actions">
+                                        <button class="action-btn" onclick="copyContent('img-get-code')">📋</button>
+                                        <button class="action-btn" onclick="downloadContent('img-get-code', 'csrf-image.html')">⬇️</button>
+                                    </div>
+                                </div>
+                                <div class="code-container">
+                                    <pre id="img-get-code" class="code-block"></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="card neon-border">
+                <div class="card-header">
+                    <h3>📚 Templates & History</h3>
+                </div>
+                <div class="card-body">
+                    <div class="sidebar-section">
+                        <h4>Quick Templates</h4>
+                        <div id="quick-templates" class="template-list"></div>
+                    </div>
+                    <div class="sidebar-section">
+                        <h4>Recent Requests</h4>
+                        <div id="request-history" class="history-list"></div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="status-info">
+                    <span id="app-status" class="status-text">Ready</span>
+                    <span class="separator">|</span>
+                    <span class="version">v2.0.0</span>
+                </div>
+                <div class="keyboard-shortcuts">
+                    <span class="shortcut"><kbd>Ctrl+Enter</kbd> Generate</span>
+                    <span class="shortcut"><kbd>Ctrl+K</kbd> Clear</span>
+                    <span class="shortcut"><kbd>Ctrl+S</kbd> Save</span>
+                </div>
+            </div>
+        </footer>
     </div>
-  </div>
 
-  <script>
-    function parseRequest(rawRequest) {
-      const cleaned = rawRequest.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-      const [headers, body] = cleaned.split(/\n\n+/);
-      const headerLines = headers.split('\n').filter(l => l.trim());
-      const [method, path] = headerLines[0].split(/\s+/);
-      const hostLine = headerLines.find(h => h.toLowerCase().startsWith('host:'));
-      const host = hostLine ? hostLine.split(': ')[1].trim() : '';
-      return { method, path, host, body: body || '' };
-    }
+    <!-- Floating Action Button -->
+    <button id="fab-help" class="fab" title="Help & Shortcuts">
+        <span class="fab-icon">❓</span>
+    </button>
 
-    function generateForm({ method, path, host, body }) {
-      const protocol = document.querySelector('input[name="protocol"]:checked').id;
-      const action = `${protocol}://${host}${path.split('?')[0]}`;
-      const paramString = method === 'GET' ? (path.includes('?') ? path.split('?')[1] : '') : body;
-      const params = new URLSearchParams(paramString);
-      const inputs = Array.from(params.entries())
-        .map(([k, v]) => `<input type="hidden" name="${k}" value="${v}">`)
-        .join('\n');
+    <!-- Notifications -->
+    <div id="notifications" class="notifications-container"></div>
 
-      return `<!DOCTYPE html>
-<html>
-<head>
-  <title>CSRF PoC</title>
-</head>
-<body>
-  <form method="${method}" action="${action}">
-    ${inputs}
-    <input type="submit" value="Submit Request">
-  </form>
-</body>
-</html>`;
-    }
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Generating PoC...</div>
+        </div>
+    </div>
 
-    function generatePoC() {
-      try {
-        const rawRequest = document.getElementById('input-box').textContent;
-        if (!rawRequest.trim()) throw new Error('No input provided');
-        const parsed = parseRequest(rawRequest);
-        if (!parsed.host) throw new Error('Host header missing');
-        const formHTML = generateForm(parsed);
-        document.getElementById('output-box').textContent = formHTML;
-      } catch (error) {
-        alert(`💥 Error: ${error.message}`);
-      }
-    }
-
-    function copyOutput() {
-      const output = document.getElementById('output-box');
-      navigator.clipboard.writeText(output.textContent);
-    }
-
-    function downloadHTML() {
-      const content = document.getElementById('output-box').textContent;
-      const blob = new Blob([content], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `csrf-poc-${Date.now()}.html`;
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    // Sample auto-fill
-    document.getElementById('input-box').textContent = `POST /update-email HTTP/1.1
-Host: example.com
-Content-Type: application/x-www-form-urlencoded
-Content-Length: 32
-
-email=test@example.com`;
-    generatePoC();
-  </script>
+    <script src="app.js"></script>
 </body>
 </html>
