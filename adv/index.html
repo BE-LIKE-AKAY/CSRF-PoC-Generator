@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced CSRF PoC Generator - Hacker Edition</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Matrix Rain Background -->
+    <canvas id="matrix-canvas"></canvas>
+    
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="main-title">
+                <span class="skull">💀</span>
+                <span class="typing-text">ADVANCED CSRF POC GENERATOR</span>
+                <span class="skull">💀</span>
+            </h1>
+            <p class="subtitle glitch-text">Professional Penetration Testing Tool</p>
+            <div class="warning-banner">
+                <span class="warning-icon">⚠️</span>
+                Educational Use Only - Use Responsibly
+                <span class="warning-icon">⚠️</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Input Section -->
+            <section class="input-section">
+                <div class="card neon-border">
+                    <div class="card-header">
+                        <h2>📡 HTTP REQUEST INPUT</h2>
+                        <div class="header-controls">
+                            <select id="template-selector" class="control-select">
+                                <option value="">Select Template</option>
+                            </select>
+                            <button id="clear-btn" class="control-btn">🗑️ Clear</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="protocol-selector">
+                            <label class="radio-label">
+                                <input type="radio" name="protocol" value="https" checked>
+                                <span class="radio-custom"></span>
+                                HTTPS
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="protocol" value="http">
+                                <span class="radio-custom"></span>
+                                HTTP
+                            </label>
+                        </div>
+                        <div class="input-container">
+                            <textarea id="request-input" class="request-textarea" placeholder="Paste your HTTP request here..."></textarea>
+                            <div class="input-status">
+                                <span id="validation-status" class="status-indicator">Ready</span>
+                                <span id="char-count" class="char-count">0 chars</span>
+                            </div>
+                        </div>
+                        <div class="input-actions">
+                            <button id="generate-btn" class="btn btn-primary pulse-animation">
+                                <span class="btn-icon">🚀</span>
+                                Generate PoC
+                            </button>
+                            <button id="validate-btn" class="btn btn-secondary">
+                                <span class="btn-icon">✅</span>
+                                Validate
+                            </button>
+                            <button id="save-template-btn" class="btn btn-secondary">
+                                <span class="btn-icon">💾</span>
+                                Save Template
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Output Section -->
+            <section class="output-section">
+                <div class="card neon-border">
+                    <div class="card-header">
+                        <h2>⚡ GENERATED POC</h2>
+                        <div class="header-controls">
+                            <button id="copy-all-btn" class="control-btn">📋 Copy All</button>
+                            <button id="download-all-btn" class="control-btn">⬇️ Download</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="poc-tabs">
+                            <button class="tab-btn active" data-tab="html-form">📄 HTML Form</button>
+                            <button class="tab-btn" data-tab="auto-form">🤖 Auto-Submit</button>
+                            <button class="tab-btn" data-tab="js-fetch">📡 JS Fetch</button>
+                            <button class="tab-btn" data-tab="xhr">🔄 XMLHttpRequest</button>
+                            <button class="tab-btn" data-tab="img-get">🖼️ Image GET</button>
+                        </div>
+                        <div class="poc-content">
+                            <div id="html-form" class="tab-content active">
+                                <div class="output-header">
+                                    <span class="output-title">HTML Form PoC</span>
+                                    <div class="output-actions">
+                                        <button class="action-btn" onclick="copyContent('html-form-code')">📋</button>
+                                        <button class="action-btn" onclick="downloadContent('html-form-code', 'csrf-form.html')">⬇️</button>
+                                    </div>
+                                </div>
+                                <div class="code-container">
+                                    <pre id="html-form-code" class="code-block"></pre>
+                                </div>
+                            </div>
+                            <div id="auto-form" class="tab-content">
+                                <div class="output-header">
+                                    <span class="output-title">Auto-Submit Form PoC</span>
+                                    <div class="output-actions">
+                                        <button class="action-btn" onclick="copyContent('auto-form-code')">📋</button>
+                                        <button class="action-btn" onclick="downloadContent('auto-form-code', 'csrf-auto.html')">⬇️</button>
+                                    </div>
+                                </div>
+                                <div class="code-container">
+                                    <pre id="auto-form-code" class="code-block"></pre>
+                                </div>
+                            </div>
+                            <div id="js-fetch" class="tab-content">
+                                <div class="output-header">
+                                    <span class="output-title">JavaScript Fetch PoC</span>
+                                    <div class="output-actions">
+                                        <button class="action-btn" onclick="copyContent('js-fetch-code')">📋</button>
+                                        <button class="action-btn" onclick="downloadContent('js-fetch-code', 'csrf-fetch.html')">⬇️</button>
+                                    </div>
+                                </div>
+                                <div class="code-container">
+                                    <pre id="js-fetch-code" class="code-block"></pre>
+                                </div>
+                            </div>
+                            <div id="xhr" class="tab-content">
+                                <div class="output-header">
+                                    <span class="output-title">XMLHttpRequest PoC</span>
+                                    <div class="output-actions">
+                                        <button class="action-btn" onclick="copyContent('xhr-code')">📋</button>
+                                        <button class="action-btn" onclick="downloadContent('xhr-code', 'csrf-xhr.html')">⬇️</button>
+                                    </div>
+                                </div>
+                                <div class="code-container">
+                                    <pre id="xhr-code" class="code-block"></pre>
+                                </div>
+                            </div>
+                            <div id="img-get" class="tab-content">
+                                <div class="output-header">
+                                    <span class="output-title">Image GET PoC</span>
+                                    <div class="output-actions">
+                                        <button class="action-btn" onclick="copyContent('img-get-code')">📋</button>
+                                        <button class="action-btn" onclick="downloadContent('img-get-code', 'csrf-image.html')">⬇️</button>
+                                    </div>
+                                </div>
+                                <div class="code-container">
+                                    <pre id="img-get-code" class="code-block"></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="card neon-border">
+                <div class="card-header">
+                    <h3>📚 Templates & History</h3>
+                </div>
+                <div class="card-body">
+                    <div class="sidebar-section">
+                        <h4>Quick Templates</h4>
+                        <div id="quick-templates" class="template-list"></div>
+                    </div>
+                    <div class="sidebar-section">
+                        <h4>Recent Requests</h4>
+                        <div id="request-history" class="history-list"></div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="status-info">
+                    <span id="app-status" class="status-text">Ready</span>
+                    <span class="separator">|</span>
+                    <span class="version">v2.0.0</span>
+                </div>
+                <div class="keyboard-shortcuts">
+                    <span class="shortcut"><kbd>Ctrl+Enter</kbd> Generate</span>
+                    <span class="shortcut"><kbd>Ctrl+K</kbd> Clear</span>
+                    <span class="shortcut"><kbd>Ctrl+S</kbd> Save</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Floating Action Button -->
+    <button id="fab-help" class="fab" title="Help & Shortcuts">
+        <span class="fab-icon">❓</span>
+    </button>
+
+    <!-- Notifications -->
+    <div id="notifications" class="notifications-container"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Generating PoC...</div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
